@@ -64,8 +64,13 @@ func NotInSecondWithSort(arr1 []string, arr2 []string) ([]string, []string) {
 }
 
 func main() {
-	first := ReadFile("example/first.txt")
-	second := ReadFile("example/second.txt")
+	if len(os.Args) != 3 {
+		fmt.Println("Usage: godiff <first file> <second file>")
+		os.Exit(0)
+	}
+
+	first := ReadFile(os.Args[1])
+	second := ReadFile(os.Args[2])
 	res, ser := NotInSecondWithSort(first, second)
 	fmt.Printf("\nStrings from the second file that is not in first:\n%v\n", res)
 	fmt.Printf("\nStrings from the first file that is not in second:\n%v\n", ser)
