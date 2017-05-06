@@ -1,4 +1,5 @@
 # godiff
+Find differnt strings in two files.
 
 **Usage:**
 
