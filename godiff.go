@@ -8,7 +8,7 @@ import (
 	"sync"
 )
 
-// Read file and return it as an arrays of strings
+// Read file and return it as arrays of strings
 func ReadFile(fname string) []string {
 	inArr := []string{}
 	if file, err := os.Open(fname); err == nil {
@@ -69,8 +69,14 @@ func main() {
 		os.Exit(0)
 	}
 
-	first := ReadFile(os.Args[1])
-	second := ReadFile(os.Args[2])
+	first := []string{}
+	second := []string{}
+	var wg sync.WaitGroup
+	wg.Add(2)
+	go func() { defer wg.Done(); first = ReadFile(os.Args[1]) }()
+	go func() { defer wg.Done(); second = ReadFile(os.Args[2]) }()
+	wg.Wait()
+
 	res, ser := NotInSecondWithSort(first, second)
 	fmt.Printf("\nStrings from the second file that is not in first:\n%v\n", res)
 	fmt.Printf("\nStrings from the first file that is not in second:\n%v\n", ser)
