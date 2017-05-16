@@ -6,6 +6,7 @@ import (
 	"os"
 	"runtime"
 	"sort"
+	"strings"
 	"sync"
 )
 
@@ -16,7 +17,7 @@ func ReadFile(fname string) []string {
 		defer file.Close()
 		scanner := bufio.NewScanner(file)
 		for scanner.Scan() {
-			inArr = append(inArr, scanner.Text())
+			inArr = append(inArr, strings.TrimSpace(scanner.Text()))
 		}
 		fmt.Printf("File %v has %v strings\n", fname, len(inArr))
 		// check for errors
