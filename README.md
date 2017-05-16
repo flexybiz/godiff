@@ -5,5 +5,7 @@ Find differnt strings in two files.
 
 Compile it with:
 `go build`
+
 and run:
+
 `godiff example/first.txt example/second.txt`
