@@ -82,7 +82,7 @@ func NotInSecondWithSort(arr1 []string, arr2 []string) ([]string, []string) {
 }
 
 // Write differences into files
-func Write(arr []string, fname string) {
+func WriteFile(arr []string, fname string) {
 	if fout, err := os.Create(fname); err == nil {
 		defer fout.Close()
 		for _, str := range arr {
@@ -114,12 +114,12 @@ func main() {
 	wg.Add(2)
 	go func() {
 		defer wg.Done()
-		Write(res, "diff_f_s.txt")
+		WriteFile(res, "diff_f_s.txt")
 		fmt.Printf("\nFound %v strings from second file that is not in first (saved in diff_f_s.txt)\n", len(res))
 	}()
 	go func() {
 		defer wg.Done()
-		Write(ser, "diff_s_f.txt")
+		WriteFile(ser, "diff_s_f.txt")
 		fmt.Printf("Found %v strings from first file that is not in second (saved in diff_s_f.txt)\n", len(ser))
 	}()
 	wg.Wait()
