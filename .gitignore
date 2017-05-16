@@ -10,6 +10,7 @@
 /godiff
 /diff_f_s.txt
 /diff_s_f.txt
+/*.exe
 
 # Ignore all logfiles and tempfiles.
 /log/*
