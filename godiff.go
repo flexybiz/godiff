@@ -53,22 +53,26 @@ func NotInSecondWithSort(arr1 []string, arr2 []string) ([]string, []string) {
 	} else { // 3
 		i := 0
 		j := 0
-		println(len(arr1))
+		// main loop
 		for i < len(arr1) && j < len(arr2) {
-			print(i)
-			println(j)
 			if arr1[i] < arr2[j] {
 				rra = append(rra, arr1[i])
-				println("i")
 				i++
 			} else if arr2[j] < arr1[i] {
 				arr = append(arr, arr2[j])
-				println("j")
 				j++
 			} else {
+				fmt.Println(i, j)
 				i++
 				j++
 			}
+		}
+		// collect tails
+		if i < len(arr1) {
+			rra = append(rra, arr1[i:]...)
+		}
+		if j < len(arr2) {
+			arr = append(arr, arr2[j:]...)
 		}
 	}
 
@@ -90,7 +94,7 @@ func main() {
 	go func() { defer wg.Done(); second = ReadFile(os.Args[2]) }()
 	wg.Wait()
 
-	ser, res := NotInSecondWithSort(first, second)
+	res, ser := NotInSecondWithSort(first, second)
 	fmt.Printf("\nStrings from the second file that is not in first:\n%v\n", res)
 	fmt.Printf("\nStrings from the first file that is not in second:\n%v\n", ser)
 }
