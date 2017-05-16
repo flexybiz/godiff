@@ -79,6 +79,14 @@ func NotInSecondWithSort(arr1 []string, arr2 []string) ([]string, []string) {
 	return arr, rra
 }
 
+func write(arr []string, fname string) {
+	fout, _ := os.Create(fname)
+	defer fout.Close()
+	for _, str := range arr {
+		fout.WriteString(str + "\n")
+	}
+}
+
 func main() {
 	runtime.GOMAXPROCS(2)
 	if len(os.Args) != 3 {
@@ -95,6 +103,8 @@ func main() {
 	wg.Wait()
 
 	res, ser := NotInSecondWithSort(first, second)
-	fmt.Printf("\nStrings from the second file that is not in first:\n%v\n", res)
-	fmt.Printf("\nStrings from the first file that is not in second:\n%v\n", ser)
+	write(res, "diff_f_s.txt")
+	fmt.Printf("\nFound %v strings from second file that is not in first (saved in diff_s_f.txt)\n", len(res))
+	write(ser, "diff_s_f.txt")
+	fmt.Printf("\nFound %v strings from first file that is not in second (saved in diff_s_f.txt)\n", len(ser))
 }
