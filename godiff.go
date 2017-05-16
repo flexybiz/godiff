@@ -62,7 +62,6 @@ func NotInSecondWithSort(arr1 []string, arr2 []string) ([]string, []string) {
 				arr = append(arr, arr2[j])
 				j++
 			} else {
-				fmt.Println(i, j)
 				i++
 				j++
 			}
@@ -104,7 +103,7 @@ func main() {
 
 	res, ser := NotInSecondWithSort(first, second)
 	write(res, "diff_f_s.txt")
-	fmt.Printf("\nFound %v strings from second file that is not in first (saved in diff_s_f.txt)\n", len(res))
+	fmt.Printf("\nFound %v strings from second file that is not in first (saved in diff_f_s.txt)\n", len(res))
 	write(ser, "diff_s_f.txt")
 	fmt.Printf("\nFound %v strings from first file that is not in second (saved in diff_s_f.txt)\n", len(ser))
 }
