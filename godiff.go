@@ -21,13 +21,15 @@ func ReadFile(fname string) []string {
 			// trim leading & trailing spaces
 			inArr = append(inArr, strings.TrimSpace(scanner.Text()))
 		}
-		fmt.Printf("File %v has %v strings\n", fname, len(inArr))
 		// check for errors
 		if err = scanner.Err(); err != nil {
 			fmt.Println(err)
+			os.Exit(1)
 		}
+		fmt.Printf("File %v has %v strings\n", fname, len(inArr))
 	} else {
 		fmt.Println(err)
+		os.Exit(1)
 	}
 	return inArr
 }
@@ -90,6 +92,7 @@ func WriteFile(arr []string, fname string) {
 		}
 	} else {
 		fmt.Println(err)
+		os.Exit(1)
 	}
 }
 
@@ -97,7 +100,7 @@ func main() {
 	runtime.GOMAXPROCS(2)
 	if len(os.Args) != 3 {
 		fmt.Println("Usage: godiff <first file> <second file>")
-		os.Exit(0)
+		os.Exit(1)
 	}
 
 	start := time.Now()
