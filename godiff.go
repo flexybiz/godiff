@@ -96,20 +96,13 @@ func WriteFile(arr []string, fname string) {
 	}
 }
 
-func main() {
-	runtime.GOMAXPROCS(2)
-	if len(os.Args) != 3 {
-		fmt.Println("Usage: godiff <first file> <second file>")
-		os.Exit(1)
-	}
-
-	start := time.Now()
+func Diff(firstFile string, secondFile string) {
 	first := []string{}
 	second := []string{}
 	var wg sync.WaitGroup
 	wg.Add(2)
-	go func() { defer wg.Done(); first = ReadFile(os.Args[1]) }()
-	go func() { defer wg.Done(); second = ReadFile(os.Args[2]) }()
+	go func() { defer wg.Done(); first = ReadFile(firstFile) }()
+	go func() { defer wg.Done(); second = ReadFile(secondFile) }()
 	wg.Wait()
 
 	res, ser := NotInSecondWithSort(first, second)
@@ -126,6 +119,19 @@ func main() {
 		fmt.Printf("Found %v strings from first file that is not in second (saved in diff_s_f.txt)\n", len(ser))
 	}()
 	wg.Wait()
+}
+
+func main() {
+	runtime.GOMAXPROCS(2)
+	if len(os.Args) != 3 {
+		fmt.Println("Usage: godiff <first file> <second file>")
+		os.Exit(1)
+	}
+
+	start := time.Now()
+
+	Diff(os.Args[1], os.Args[2])
+
 	elapsed := time.Since(start)
 	fmt.Printf("\nDone in %v\n", elapsed)
 }

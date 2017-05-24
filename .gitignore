@@ -8,6 +8,7 @@
 *.swp
 
 /godiff
+/godiff.test
 /diff_f_s.txt
 /diff_s_f.txt
 /*.exe
