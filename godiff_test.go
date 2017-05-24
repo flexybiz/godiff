@@ -8,7 +8,7 @@ func TestDiff(t *testing.T) {
 
 	res, ser := NotInSecondWithSort(arr1, arr2)
 	if res[0] != "line 2" {
-		t.Error(res)
+		t.Error("First array should start from \"line 2\" string")
 	}
 	if len(ser) != 0 {
 		t.Error("Second array should be empty")
