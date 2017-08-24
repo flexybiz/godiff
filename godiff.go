@@ -121,17 +121,83 @@ func Diff(firstFile string, secondFile string) {
 	wg.Wait()
 }
 
+func firstMethod() {
+	start := time.Now()
+
+	Diff(os.Args[1], os.Args[2])
+
+	fmt.Printf("\nDone in %v\n", time.Since(start))
+}
+
 func main() {
 	runtime.GOMAXPROCS(2)
 	if len(os.Args) != 3 {
 		fmt.Println("Usage: godiff <first file> <second file>")
 		os.Exit(1)
 	}
+	fmt.Println(strings.Repeat("-", 50))
+	firstMethod()
+	fmt.Println(strings.Repeat("-", 50))
+	secondMethod()
+	fmt.Println(strings.Repeat("-", 50))
+}
 
+func secondMethod() {
 	start := time.Now()
+	firstFile := os.Args[1]
+	// 1. read one of file to map
+	first := ReadFileToMap(firstFile)
 
-	Diff(os.Args[1], os.Args[2])
+	if file, err := os.Open(os.Args[2]); err == nil {
+		defer file.Close()
+		var res []string
+		scanner := bufio.NewScanner(file)
+		// 2. read second file line by line and check if this line exists in first file's map
+		flen := 0
+		for scanner.Scan() {
+			// trim leading & trailing spaces
+			str := strings.TrimSpace(scanner.Text())
+			if _, ok := first[str]; ok == false {
+				res = append(res, str)
+			}
+			flen++
+		}
+		// check for errors
+		if err = scanner.Err(); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		fmt.Printf("File %v has %v strings\n", os.Args[2], flen)
+		// 3. write differences
+		WriteFile(res, "diff_f_s1.txt")
+		fmt.Printf("\nFound %v strings from second file that is not in first (saved in diff_f_s.txt)\n", len(res))
+	} else {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 
-	elapsed := time.Since(start)
-	fmt.Printf("\nDone in %v\n", elapsed)
+	fmt.Printf("\nDone in %v\n", time.Since(start))
+}
+
+// Read file and return it as map of strings
+func ReadFileToMap(fname string) map[string]int {
+	outMap := make(map[string]int)
+	if file, err := os.Open(fname); err == nil {
+		defer file.Close()
+		scanner := bufio.NewScanner(file)
+		for scanner.Scan() {
+			// trim leading & trailing spaces
+			outMap[strings.TrimSpace(scanner.Text())] = 0
+		}
+		// check for errors
+		if err = scanner.Err(); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		fmt.Printf("File %v has %v strings\n", fname, len(outMap))
+	} else {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	return outMap
 }
