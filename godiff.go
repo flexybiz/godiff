@@ -121,12 +121,14 @@ func Diff(firstFile string, secondFile string) {
 	wg.Wait()
 }
 
-func firstMethod() {
+func firstMethod() time.Duration {
 	start := time.Now()
 
 	Diff(os.Args[1], os.Args[2])
 
-	fmt.Printf("\nDone in %v\n", time.Since(start))
+	elapsed := time.Since(start)
+	fmt.Printf("\nDone in %v\n", elapsed)
+	return elapsed
 }
 
 func main() {
@@ -136,13 +138,15 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Println(strings.Repeat("-", 50))
-	firstMethod()
+	first := firstMethod()
 	fmt.Println(strings.Repeat("-", 50))
-	secondMethod()
+	second := secondMethod()
 	fmt.Println(strings.Repeat("-", 50))
+	//fmt.Printf("Diff is: %f%%\n", ((second / time.Millisecond) / (first / time.Millisecond)))
+	fmt.Printf("Second is %0.2f%% faster\n", 100.0-(float64(second)/float64(time.Millisecond))/(float64(first)/float64(time.Millisecond))*100.0)
 }
 
-func secondMethod() {
+func secondMethod() time.Duration {
 	start := time.Now()
 	firstFile := os.Args[1]
 	// 1. read one of file to map
@@ -176,7 +180,9 @@ func secondMethod() {
 		os.Exit(1)
 	}
 
-	fmt.Printf("\nDone in %v\n", time.Since(start))
+	elapsed := time.Since(start)
+	fmt.Printf("\nDone in %v\n", elapsed)
+	return elapsed
 }
 
 // Read file and return it as map of strings
